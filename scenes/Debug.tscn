@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dgynsghpucg21"]
+
+[ext_resource type="Script" uid="uid://dk3u8dmndppv0" path="res://scripts/debug.gd" id="1_c2xgb"]
+[ext_resource type="PackedScene" uid="uid://br6mefadyw1tj" path="res://scenes/Player.tscn" id="2_b1f3y"]
+
+[node name="Debug" type="Node2D" unique_id=546169269]
+script = ExtResource("1_c2xgb")
+
+[node name="sky" type="ColorRect" parent="." unique_id=1129693228]
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+color = Color(0.6542321, 0.6542321, 0.654232, 1)
+
+[node name="ground" type="ColorRect" parent="." unique_id=842863540]
+offset_top = 423.0
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+color = Color(0.28118682, 0.28118688, 0.28118682, 1)
+
+[node name="player" parent="." unique_id=1059586711 instance=ExtResource("2_b1f3y")]
+position = Vector2(344, 313)
