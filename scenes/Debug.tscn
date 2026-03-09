@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://dk3u8dmndppv0" path="res://scripts/debug.gd" id="1_c2xgb"]
 [ext_resource type="PackedScene" uid="uid://br6mefadyw1tj" path="res://scenes/Player.tscn" id="2_b1f3y"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c2xgb"]
+size = Vector2(1157, 175)
+
 [node name="Debug" type="Node2D" unique_id=546169269]
 script = ExtResource("1_c2xgb")
 
@@ -19,5 +22,11 @@ offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.28118682, 0.28118688, 0.28118682, 1)
 
-[node name="player" parent="." unique_id=1059586711 instance=ExtResource("2_b1f3y")]
-position = Vector2(344, 313)
+[node name="StaticBody2D" type="StaticBody2D" parent="ground" unique_id=443626647]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ground/StaticBody2D" unique_id=396696602]
+position = Vector2(568.5, 135.5)
+shape = SubResource("RectangleShape2D_c2xgb")
+
+[node name="Player" parent="." unique_id=842425172 instance=ExtResource("2_b1f3y")]
+position = Vector2(70, 318)
