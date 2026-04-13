@@ -1,18 +1,18 @@
-extends CharacterBody2D
+extends RigidBody2D
 
 @onready var player = get_parent()
 var looking_left:bool
 var input_dir:Vector2
-var walking = false
-var bouncing = false
-var torso_start_y:float
-var time_passed = 0.0
-var target_tilt = 0.0
-const move_speed = 400
-const move_accel = 1000
-const bounce_height = 6.5
-const bounce_speed = 12
-const tilt_speed = 1.25
+var y_anchor:float
+var highest = 0.0
+var lowest = 0.0
+#idling vars
+var idle_target
+const idle_anchor_bounds = 6
+#walking vars
+var walk_target
+const walk_anchor_bounds = 8
+
 
 func _check_player_variables() -> void:
 	input_dir = player.input_dir
@@ -23,42 +23,62 @@ func _turn_torso_to_looking_direction() -> void:
 		$Sprite2D.flip_h = true
 	else:
 		$Sprite2D.flip_h = false
-		
-func _torso_tilt_animation(delta) -> void:
-	if input_dir.x > 0 and looking_left:
-		target_tilt = deg_to_rad(-6)
-	elif input_dir.x > 0 and not looking_left:
-		target_tilt = deg_to_rad(-6)
-	elif input_dir.x < 0 and looking_left:
-		target_tilt = deg_to_rad(6)
-	elif input_dir.x < 0 and not looking_left:
-		target_tilt = deg_to_rad(6)
-	else:
-		target_tilt = deg_to_rad(0)
-	$Sprite2D.rotation = move_toward($Sprite2D.rotation, target_tilt, tilt_speed * delta)
-		
-func _torso_walking_animation(delta) -> void:
-	if input_dir.x == 0:
-		walking = false
-	if input_dir.x != 0 and not bouncing:
-		torso_start_y = $Sprite2D.position.y
-		walking = true
-		bouncing = true
-		time_passed = 0.0
-	if walking and bouncing:
-		time_passed += delta
-		$Sprite2D.position.y = torso_start_y + sin(time_passed * bounce_speed) * bounce_height
-	if not walking and bouncing:
-		$Sprite2D.position.y = move_toward($Sprite2D.position.y, torso_start_y, bounce_speed * delta)
-	if not walking and bouncing and $Sprite2D.position.y == torso_start_y:
-		bouncing = false
+
+func _idling() -> void:
+	if idle_target == null:
+		idle_target = y_anchor + idle_anchor_bounds
+	linear_damp = 5.0
+	var idle_strength: float = 5
+	var offset = idle_target - global_position.y
 	
+	if abs(offset) < 1:
+		if idle_target > y_anchor:
+			idle_target = y_anchor - idle_anchor_bounds
+		else:
+			idle_target = y_anchor + idle_anchor_bounds
+			
+	apply_central_force(Vector2(0, offset * idle_strength))
+
+func _walking() -> void:
+	if walk_target == null:
+		walk_target = y_anchor + walk_anchor_bounds
+	linear_damp = 4.0
+	var walk_strength: float = 1000
+	var walk_bounce_strength: float = 10
+	var arrival_threshold: float = 2
+	var offset = walk_target - global_position.y
+	
+	if abs(offset) < arrival_threshold:
+		if walk_target > y_anchor:
+			walk_target = y_anchor - walk_anchor_bounds
+		else:
+			walk_target = y_anchor + walk_anchor_bounds
+	apply_central_force(Vector2(0, offset * walk_bounce_strength))
+	apply_central_force(Vector2(walk_strength * input_dir.x, 0))
+	
+	
+func _highestlowest() -> void:
+	var newhighest = position.y
+	var newlowest = position.y
+	if newhighest < highest:
+		highest = newhighest
+		print("highest: " + str(highest))
+	if newlowest > lowest:
+		lowest = newlowest
+		print("lowest: " + str(lowest))
+
+func _ready() -> void:
+	y_anchor = global_position.y
+
 func _process(_delta: float) -> void:
 	_check_player_variables()
 	_turn_torso_to_looking_direction()
+	_highestlowest()
+	print(linear_damp)
 
-func _physics_process(delta: float) -> void:
-	velocity.x = move_toward(velocity.x, input_dir.x * move_speed, move_accel * delta)
-	move_and_slide()
-	_torso_walking_animation(delta)
-	_torso_tilt_animation(delta)
+func _physics_process(_delta: float) -> void:
+	if input_dir == Vector2.ZERO:
+		_idling()
+	else:
+		_walking()
+		pass
