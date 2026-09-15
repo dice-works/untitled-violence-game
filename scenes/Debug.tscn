@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgynsghpucg21"]
 
 [ext_resource type="Script" uid="uid://dk3u8dmndppv0" path="res://scripts/debug.gd" id="1_c2xgb"]
-[ext_resource type="PackedScene" uid="uid://br6mefadyw1tj" path="res://scenes/Player.tscn" id="2_b1f3y"]
+[ext_resource type="PackedScene" uid="uid://br6mefadyw1tj" path="res://scenes/PhysicsTest.tscn" id="2_b1f3y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c2xgb"]
 size = Vector2(1157, 24)
@@ -10,12 +10,14 @@ size = Vector2(1157, 24)
 script = ExtResource("1_c2xgb")
 
 [node name="sky" type="ColorRect" parent="." unique_id=1129693228]
+z_index = -2
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 color = Color(0.6542321, 0.6542321, 0.654232, 1)
 
 [node name="ground" type="ColorRect" parent="." unique_id=842863540]
+z_index = -2
 offset_top = 423.0
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -25,8 +27,16 @@ color = Color(0.28118682, 0.28118688, 0.28118682, 1)
 [node name="StaticBody2D" type="StaticBody2D" parent="ground" unique_id=443626647]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ground/StaticBody2D" unique_id=396696602]
-position = Vector2(568.5, 85)
+position = Vector2(572, 12)
 shape = SubResource("RectangleShape2D_c2xgb")
+debug_color = Color(0, 0.9254902, 0.69803923, 0.41960785)
 
-[node name="Player" parent="." unique_id=842425172 instance=ExtResource("2_b1f3y")]
-position = Vector2(73, 252)
+[node name="Node" parent="." unique_id=1419880223 instance=ExtResource("2_b1f3y")]
+
+[node name="RigidBody2D" parent="Node" index="0" unique_id=1230469319]
+position = Vector2(571, 207)
+
+[node name="CollisionShape2D" parent="Node/RigidBody2D" index="0" unique_id=1740820463]
+position = Vector2(0, 0)
+
+[editable path="Node"]

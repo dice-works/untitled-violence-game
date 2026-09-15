@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://br6mefadyw1tj"]
+
+[ext_resource type="Script" uid="uid://cljua0o1g7jx6" path="res://scripts/move_target.gd" id="1_56gqh"]
+[ext_resource type="Texture2D" uid="uid://cu8aeeagrahs1" path="res://visuals_audio/marker.png" id="1_n6e4x"]
+[ext_resource type="Script" uid="uid://cjdiijf5ady" path="res://scripts/rb_move-towards-target.gd" id="1_y7oj2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7m2n1"]
+size = Vector2(156, 159.5)
+
+[node name="Node" type="Node2D" unique_id=1908324368]
+script = ExtResource("1_56gqh")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1230469319]
+script = ExtResource("1_y7oj2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1740820463]
+position = Vector2(78, 80)
+shape = SubResource("RectangleShape2D_7m2n1")
+
+[node name="Target" type="Marker2D" parent="." unique_id=305869476]
+unique_name_in_owner = true
+position = Vector2(571, 143)
+
+[node name="Sprite2D" type="Sprite2D" parent="Target" unique_id=1269186466]
+position = Vector2(-1.04904175e-05, -4.7683716e-06)
+scale = Vector2(0.041015647, 0.041015647)
+texture = ExtResource("1_n6e4x")
