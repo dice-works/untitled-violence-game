@@ -36,7 +36,4 @@ debug_color = Color(0, 0.9254902, 0.69803923, 0.41960785)
 [node name="RigidBody2D" parent="Node" index="0" unique_id=1230469319]
 position = Vector2(571, 207)
 
-[node name="CollisionShape2D" parent="Node/RigidBody2D" index="0" unique_id=1740820463]
-position = Vector2(0, 0)
-
 [editable path="Node"]
